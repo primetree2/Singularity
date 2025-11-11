@@ -1,0 +1,187 @@
+# ============================================
+# Singularity Astro Service - Requirements
+# ============================================
+# Python 3.10+ required
+
+# ============================================
+# Web Framework
+# ============================================
+fastapi==0.104.1
+uvicorn[standard]==0.24.0  # ASGI server with auto-reload
+pydantic==2.5.0            # Data validation
+pydantic-settings==2.1.0   # Settings management
+
+# ============================================
+# Astronomy & Science Libraries
+# ============================================
+# Core astronomy calculations
+skyfield==1.48             # High-precision astronomy calculations
+sgp4==2.23                 # Satellite orbit propagation (TLE)
+astropy==5.3.4             # Professional astronomy toolkit
+pytz==2023.3.post1         # Timezone handling
+
+
+# Coordinate transformations
+pyproj==3.6.1              # Cartographic projections
+
+# ============================================
+# HTTP Clients & API Integration
+# ============================================
+httpx==0.25.1              # Modern async HTTP client
+requests==2.31.0           # Synchronous HTTP (for simple APIs)
+aiohttp==3.9.0             # Async HTTP client (alternative)
+
+# ============================================
+# Caching & Performance
+# ============================================
+redis==5.0.1               # Redis client for caching
+hiredis==2.2.3             # Fast Redis protocol parser
+aiocache==0.12.2           # Async caching framework
+
+# ============================================
+# Data Processing
+# ============================================
+numpy==1.26.2              # Numerical computing
+pandas==2.1.3              # Data manipulation (for TLE processing)
+python-dateutil==2.8.2     # Date parsing utilities
+
+# ============================================
+# Configuration & Environment
+# ============================================
+python-dotenv==1.0.0       # Load .env files
+
+# ============================================
+# Validation & Serialization
+# ============================================
+python-multipart==0.0.6    # Form data parsing (for file uploads)
+orjson==3.9.10             # Fast JSON serialization
+
+# ============================================
+# Background Tasks (Optional - Stage 3+)
+# ============================================
+# Uncomment when you add worker tasks
+# celery==5.3.4            # Distributed task queue
+# celery[redis]==5.3.4     # Redis as Celery broker
+
+# ============================================
+# Database (Optional - if direct access needed)
+# ============================================
+# Uncomment if astro-service needs direct DB access
+# asyncpg==0.29.0          # Async PostgreSQL driver
+# sqlalchemy==2.0.23       # ORM
+# alembic==1.12.1          # Database migrations
+
+# ============================================
+# Testing
+# ============================================
+pytest==7.4.3              # Testing framework
+pytest-asyncio==0.21.1     # Async test support
+pytest-cov==4.1.0          # Coverage reporting
+httpx==0.25.1              # Already listed above (for TestClient)
+
+# ============================================
+# Code Quality & Linting
+# ============================================
+black==23.11.0             # Code formatter
+flake8==6.1.0              # Linter
+mypy==1.7.1                # Type checking
+isort==5.12.0              # Import sorting
+
+# ============================================
+# Monitoring & Logging
+# ============================================
+python-json-logger==2.0.7  # Structured JSON logging
+sentry-sdk[fastapi]==1.38.0  # Error tracking
+
+# ============================================
+# Security
+# ============================================
+python-jose[cryptography]==3.3.0  # JWT tokens (if needed)
+passlib[bcrypt]==1.7.4     # Password hashing (if needed)
+
+# ============================================
+# CORS & Middleware
+# ============================================
+# Already included in FastAPI, but explicit version:
+starlette==0.27.0          # ASGI framework (FastAPI dependency)
+
+# ============================================
+# Data Fetching & Parsing
+# ============================================
+beautifulsoup4==4.12.2     # HTML parsing (if scraping needed)
+lxml==4.9.3                # XML/HTML parser
+
+# ============================================
+# Geospatial (Optional - Stage 2+)
+# ============================================
+# Uncomment when adding light pollution/elevation data
+# rasterio==1.3.9          # Geospatial raster data
+# shapely==2.0.2           # Geometric operations
+# geopy==2.4.1             # Geocoding
+
+# ============================================
+# Weather Integration (Stage 2)
+# ============================================
+# No specific library needed - use httpx/requests for API calls
+
+# ============================================
+# Development Dependencies
+# ============================================
+# These are only for development, remove in production requirements
+ipython==8.17.2            # Better REPL
+ipdb==0.13.13              # Debugger
+
+
+# ============================================
+# Installation Instructions
+# ============================================
+# 
+# 1. Create virtual environment:
+#    python -m venv venv
+#    source venv/bin/activate  # Linux/Mac
+#    venv\Scripts\activate     # Windows
+#
+# 2. Install dependencies:
+#    pip install -r requirements.txt
+#
+# 3. Verify installation:
+#    python -c "import skyfield; import fastapi; print('Success!')"
+#
+# 4. For development with auto-reload:
+#    uvicorn app.main:app --reload
+#
+# ============================================
+# Production Requirements (Minimal)
+# ============================================
+# Create requirements-prod.txt with only runtime dependencies:
+#
+# fastapi==0.104.1
+# uvicorn[standard]==0.24.0
+# skyfield==1.46
+# sgp4==2.23
+# redis==5.0.1
+# httpx==0.25.1
+# numpy==1.26.2
+# pytz==2023.3.post1
+# python-dotenv==1.0.0
+# pydantic==2.5.0
+# pydantic-settings==2.1.0
+# sentry-sdk[fastapi]==1.38.0
+#
+# ============================================
+# Freezing Exact Versions (After Testing)
+# ============================================
+# After you've tested everything works, freeze exact versions:
+#    pip freeze > requirements-lock.txt
+#
+# This ensures reproducible builds in production
+#
+# ============================================
+# Docker Production Image
+# ============================================
+# In production Dockerfile, use:
+#    pip install --no-cache-dir -r requirements-prod.txt
+#
+# This reduces image size significantly
+
+
