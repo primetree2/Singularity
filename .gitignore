@@ -1,0 +1,315 @@
+# ============================================
+# Singularity Project - Complete .gitignore
+# ============================================
+
+# ============================================
+# Operating System Files
+# ============================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ============================================
+# IDE & Editor Files
+# ============================================
+# VSCode
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains IDEs (WebStorm, PyCharm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+.*.sw[a-z]
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================
+# Node.js & Frontend (Next.js)
+# ============================================
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Production
+/build
+/.next/
+/out/
+
+# Cache
+.cache/
+.parcel-cache/
+.npm/
+.eslintcache
+.stylelintcache
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# ============================================
+# Python & FastAPI
+# ============================================
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.python-version
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# PEP 582
+__pypackages__/
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# ============================================
+# Environment Variables & Secrets
+# ============================================
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+.env*.local
+*.pem
+*.key
+*.crt
+*.p12
+
+# API Keys & Secrets
+secrets/
+secrets.json
+service-account*.json
+
+# ============================================
+# Database
+# ============================================
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+
+# PostgreSQL
+*.dump
+*.sql
+
+# Prisma
+prisma/dev.db
+prisma/migrations/**/migration.sql
+!prisma/migrations/migration_lock.toml
+
+# ============================================
+# Docker
+# ============================================
+docker-compose.override.yml
+.dockerignore
+*.log
+
+# ============================================
+# Logs
+# ============================================
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ============================================
+# Temporary & Cache Files
+# ============================================
+*.tmp
+*.temp
+.tmp/
+tmp/
+temp/
+cache/
+
+# ============================================
+# Build Outputs
+# ============================================
+dist/
+build/
+out/
+*.min.js
+*.min.css
+
+# ============================================
+# Package Manager Locks (OPTIONAL)
+# ============================================
+# Uncomment if you want to ignore lock files
+# (Not recommended for production projects)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# ============================================
+# Project-Specific Files
+# ============================================
+
+# TLE Data Cache (astronomy service)
+astro-service/data/tle-cache/
+astro-service/data/*.tle
+
+# Uploaded user files (use S3 in production)
+uploads/
+user-uploads/
+sighting-photos/
+
+# Generated maps/tiles
+tiles/
+map-cache/
+
+# Processed datasets
+datasets/processed/
+datasets/downloaded/
+
+# Dark site data (if dynamically generated)
+frontend/public/data/dark-sites-generated.json
+
+# Prediction cache (if stored locally)
+predictions-cache/
+
+# Export files
+exports/
+*.csv
+*.xlsx
+!seed-data/*.csv
+
+# Documentation builds
+docs/_build/
+docs/.doctrees/
+
+# ============================================
+# CI/CD
+# ============================================
+.github/workflows/*.log
+
+# ============================================
+# Monitoring & Analytics
+# ============================================
+.sentry/
+sentry.properties
+
+# ============================================
+# Keep These Files (Explicitly)
+# ============================================
+!.gitkeep
+!.env.example
+!.github/
+!prisma/schema.prisma
+!docker-compose.yml
+
+# ============================================
+# End of .gitignore
+# ============================================
