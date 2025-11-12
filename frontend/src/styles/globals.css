@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========= THEME VARIABLES ========= */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 220 13% 18%;
+  --primary: 222 93% 56%;
+  --primary-foreground: 0 0% 100%;
+  --border: 220 14% 91%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 13% 18%;
+  --radius: 12px;
+}
+
+/* ========= DARK MODE ========= */
+.dark {
+  --background: 230 12% 8%;
+  --foreground: 210 14% 96%;
+  --card: 230 12% 12%;
+  
+  --card-foreground: 210 14% 96%;
+}
+
+/* ========= BASE STYLES ========= */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  @apply mx-auto max-w-6xl px-6;
+}
