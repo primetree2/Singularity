@@ -184,4 +184,9 @@ ipdb==0.13.13              # Debugger
 #
 # This reduces image size significantly
 
+# =====================================
+# Singularity Astro-Service Requirements
+# =====================================
+
+
 
