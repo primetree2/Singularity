@@ -1,0 +1,27 @@
+{
+  "name": "singularity",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Singularity monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "bootstrap": "pnpm install",
+    "dev": "pnpm -w -r run dev",
+    "build": "pnpm -w -r run build",
+    "test": "pnpm -w -r run test",
+    "lint": "pnpm -w -r run lint",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0",
+    "prettier": "^3.0.0",
+    "eslint": "^9.39.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

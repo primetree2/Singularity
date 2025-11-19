@@ -1,0 +1,627 @@
+openapi: 3.0.3
+info:
+  title: Singularity API
+  version: "0.1.0"
+  description: API specification for Singularity — astronomical events, dark sites, visibility scoring, notifications and gamification.
+servers:
+  - url: http://localhost:4000
+    description: Local development server
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        displayName:
+          type: string
+        score:
+          type: number
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - email
+        - displayName
+        - score
+        - createdAt
+
+    Event:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        start:
+          type: string
+          format: date-time
+        end:
+          type: string
+          format: date-time
+        type:
+          type: string
+        location:
+          type: object
+          properties:
+            lat:
+              type: number
+            lon:
+              type: number
+            name:
+              type: string
+          required:
+            - lat
+            - lon
+        visibilityEstimate:
+          type: object
+          properties:
+            score:
+              type: number
+            updatedAt:
+              type: string
+              format: date-time
+      required:
+        - id
+        - title
+        - start
+        - type
+        - location
+
+    DarkSite:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        location:
+          type: object
+          properties:
+            lat:
+              type: number
+            lon:
+              type: number
+          required:
+            - lat
+            - lon
+        lightPollution:
+          type: number
+        description:
+          type: string
+        distance:
+          type: number
+      required:
+        - id
+        - name
+        - location
+
+    VisibilityScore:
+      type: object
+      properties:
+        score:
+          type: number
+        updatedAt:
+          type: string
+          format: date-time
+        factors:
+          type: object
+          properties:
+            cloudCover:
+              type: number
+            aqi:
+              type: number
+            lightPollution:
+              type: number
+            elevation:
+              type: number
+            moonIllumination:
+              type: number
+            horizon:
+              type: number
+      required:
+        - score
+        - updatedAt
+        - factors
+
+    Badge:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        iconUrl:
+          type: string
+          format: uri
+        earnedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+
+    Visit:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+        eventId:
+          type: string
+          nullable: true
+        darkSiteId:
+          type: string
+          nullable: true
+        timestamp:
+          type: string
+          format: date-time
+        photoUrl:
+          type: string
+          format: uri
+        visibilityScore:
+          type: number
+        points:
+          type: number
+      required:
+        - id
+        - userId
+        - timestamp
+
+    LeaderboardEntry:
+      type: object
+      properties:
+        rank:
+          type: integer
+        user:
+          $ref: '#/components/schemas/User'
+        score:
+          type: number
+      required:
+        - rank
+        - user
+        - score
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+
+  requestBodies:
+    RegisterRequest:
+      description: Register a new user
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+              displayName:
+                type: string
+            required:
+              - email
+              - password
+              - displayName
+
+    LoginRequest:
+      description: Login request
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+            required:
+              - email
+              - password
+
+    DeviceTokenRequest:
+      description: Device token registration
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              provider:
+                type: string
+                example: webpush
+              token:
+                type: object
+                additionalProperties: true
+
+    VisitMultipart:
+      description: Visit report with optional photo (multipart)
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              userId:
+                type: string
+              eventId:
+                type: string
+                nullable: true
+              darkSiteId:
+                type: string
+                nullable: true
+              timestamp:
+                type: string
+                format: date-time
+              photo:
+                type: string
+                format: binary
+            required:
+              - userId
+              - timestamp
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      tags: [health]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: ok
+
+  /users/register:
+    post:
+      summary: Register new user
+      tags: [users]
+      requestBody:
+        $ref: '#/components/requestBodies/RegisterRequest'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/login:
+    post:
+      summary: Login user
+      tags: [users]
+      requestBody:
+        $ref: '#/components/requestBodies/LoginRequest'
+      responses:
+        '200':
+          description: Auth tokens
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  expiresIn:
+                    type: integer
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{id}:
+    get:
+      summary: Get user profile
+      tags: [users]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{id}/device-token:
+    post:
+      summary: Register device token for push notifications
+      tags: [users, notifications]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        $ref: '#/components/requestBodies/DeviceTokenRequest'
+      responses:
+        '200':
+          description: Token registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events:
+    get:
+      summary: List astronomical events
+      tags: [events]
+      parameters:
+        - name: lat
+          in: query
+          schema:
+            type: number
+            format: double
+        - name: lon
+          in: query
+          schema:
+            type: number
+            format: double
+        - name: startDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          schema:
+            type: string
+            format: date-time
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Events list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Event'
+                  total:
+                    type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /events/{id}:
+    get:
+      summary: Get single event details
+      tags: [events]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Event detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /darksites/nearest:
+    get:
+      summary: Find nearest dark sites
+      tags: [darksites]
+      parameters:
+        - name: lat
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: lon
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Nearest dark sites
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DarkSite'
+                  total:
+                    type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /visits:
+    post:
+      summary: Report a visit to event or darksite (with optional photo)
+      tags: [gamification]
+      security:
+        - bearerAuth: []
+      requestBody:
+        $ref: '#/components/requestBodies/VisitMultipart'
+      responses:
+        '200':
+          description: Visit recorded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visit'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /leaderboard:
+    get:
+      summary: Get top users by score
+      tags: [gamification]
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+      responses:
+        '200':
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LeaderboardEntry'
+                  total:
+                    type: integer
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /users/{id}/badges:
+    get:
+      summary: Get badges earned by a user
+      tags: [users, gamification]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: User badges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Badge'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
