@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  password     String
+  displayName  String
+  score        Int          @default(0)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  visits       Visit[]
+  badges       UserBadge[]
+  deviceTokens DeviceToken[]
+
+  @@map("users")
+}
+
+model Event {
+  id              String  @id @default(cuid())
+  title           String  @unique
+  description     String
+  start           DateTime
+  end             DateTime
+  type            String
+  lat             Float
+  lon             Float
+  locationName    String?
+  visibilityScore Float?
+  createdAt       DateTime @default(now())
+  visits          Visit[]
+}
+
+
+model DarkSite {
+  id             String   @id @default(cuid())
+  name           String
+  lat            Float
+  lon            Float
+  lightPollution Float
+  description    String
+  createdAt      DateTime @default(now())
+  visits         Visit[]
+
+  @@map("dark_sites")
+}
+
+model Visit {
+  id              String    @id @default(cuid())
+  userId          String
+  eventId         String?   
+  darkSiteId      String?
+  timestamp       DateTime  @default(now())
+  photoUrl        String?
+  visibilityScore Float?
+  points          Int       @default(0)
+  verified        Boolean   @default(false)
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event    Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  darkSite DarkSite?@relation(fields: [darkSiteId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([darkSiteId])
+  @@map("visits")
+}
+
+model Badge {
+  id             String     @id @default(cuid())
+  name           String     @unique
+  description    String
+  iconUrl        String
+  pointsRequired Int
+  userBadges     UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  badgeId  String
+  earnedAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([badgeId])
+  @@map("user_badges")
+}
+
+model DeviceToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String
+  platform  String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("device_tokens")
+}
