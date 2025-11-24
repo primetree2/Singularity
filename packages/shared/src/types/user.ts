@@ -57,7 +57,10 @@ export interface AuthResponse {
  * };
  */
 export interface DeviceToken {
+  id: string;
   userId: string;
   token: string;
-  platform: "web" | "android";
+  platform: 'web' | 'android';
+  createdAt: string;
 }
+
