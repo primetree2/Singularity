@@ -8,6 +8,7 @@ import eventsRouter from './routes/events.router';
 import darksitesRouter from './routes/darksites.router';
 import usersRouter from './routes/users.router';
 import notificationsRouter from './routes/notifications.router';
+import gamificationRouter from './routes/gamification.router';
 
 
 dotenv.config();
@@ -23,5 +24,6 @@ app.use('/events', eventsRouter);
 app.use('/darksites', darksitesRouter);
 app.use('/users', usersRouter);
 app.use('/notifications', notificationsRouter);
+app.use('/', gamificationRouter);
 
 export default app;
