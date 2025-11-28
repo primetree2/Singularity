@@ -1,0 +1,18 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running lint-staged..."
+pnpm lint-staged
+if [ $? -ne 0 ]; then
+  echo "lint-staged failed. Commit aborted."
+  exit 1
+fi
+
+echo "Running type check..."
+pnpm -w -r exec tsc --noEmit
+if [ $? -ne 0 ]; then
+  echo "Type check failed. Commit aborted."
+  exit 1
+fi
+
+echo "Pre-commit checks passed."

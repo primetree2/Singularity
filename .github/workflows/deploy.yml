@@ -1,0 +1,38 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy-api:
+    name: Deploy API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # TODO: Configure deployment target (Vercel, Railway, AWS, etc.)
+      # TODO: Add environment secrets
+      # TODO: Add build step for API
+      # TODO: Add deployment command
+      # TODO: Add health check after deployment
+
+      - name: Placeholder
+        run: echo "API deployment step goes here"
+
+  deploy-web:
+    name: Deploy Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # TODO: Configure deployment for frontend (Vercel recommended)
+      # TODO: Add environment secrets
+      # TODO: Add build step for web
+      # TODO: Add deployment command
+      # TODO: Add health check after deployment
+
+      - name: Placeholder
+        run: echo "Web deployment step goes here"

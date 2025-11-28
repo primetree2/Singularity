@@ -1,0 +1,51 @@
+name: API Contract Check
+
+on:
+  pull_request:
+
+jobs:
+  validate-openapi:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: npm install -g @redocly/openapi-cli
+
+      - name: Lint OpenAPI
+        run: openapi lint ./openapi.yaml
+
+  check-client-sync:
+    name: Check Generated Client Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install Dependencies
+        run: |
+          corepack enable
+          pnpm install
+
+      - name: Regenerate Client
+        run: pnpm --filter client generate:api
+
+      - name: Check for Changes
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Generated API client is out of sync with OpenAPI spec."
+            git status --porcelain
+            exit 1
+          fi
