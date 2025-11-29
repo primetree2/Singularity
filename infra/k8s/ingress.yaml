@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: singularity-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+    - hosts:
+        - your-domain.com
+      secretName: singularity-tls # TODO: create TLS secret
+  rules:
+    - host: your-domain.com
+      http:
+        paths:
+          - path: /api/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: singularity-api
+                port:
+                  number: 4000
+          - path: /(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: singularity-web
+                port:
+                  number: 3000

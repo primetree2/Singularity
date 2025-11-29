@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: singularity-web
+  labels:
+    app: singularity-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: singularity-web
+  template:
+    metadata:
+      labels:
+        app: singularity-web
+    spec:
+      containers:
+        - name: web
+          image: singularity/web:latest
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: singularity-web-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: singularity-web
+  labels:
+    app: singularity-web
+spec:
+  type: ClusterIP
+  selector:
+    app: singularity-web
+  ports:
+    - name: http
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
