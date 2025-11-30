@@ -1,0 +1,10 @@
+{
+  "generatorName": "typescript-fetch",
+  "outputDir": "packages/shared/api-client",
+  "additionalProperties": {
+    "supportsES6": true,
+    "withSeparateModelsAndApi": true,
+    "modelPropertyNaming": "camelCase",
+    "useSingleRequestParameter": true
+  }
+}
