@@ -8,13 +8,16 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "pnpm install",
-    "dev": "pnpm -w -r run dev",
-    "build": "pnpm -w -r run build",
-    "test": "pnpm -w -r run test",
-    "lint": "pnpm -w -r run lint",
-    "format": "prettier --write ."
+  "bootstrap": "pnpm install",
+  "dev": "pnpm -w -r --parallel --filter ./apps/api... --filter ./apps/web... run dev",
+  "dev:api": "pnpm --filter ./apps/api run dev",
+  "dev:web": "pnpm --filter ./apps/web run dev",
+  "build": "pnpm -w -r run build",
+  "test": "pnpm -w -r run test",
+  "lint": "pnpm -w -r run lint",
+  "format": "prettier --write ."
   },
+
   "devDependencies": {
     "@types/jest": "^30.0.0",
     "@types/node": "^18.19.130",
